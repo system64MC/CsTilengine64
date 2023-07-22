@@ -976,14 +976,14 @@ namespace Tilengine
         /// <param name="context">TLN_Engine object reference to set as current context, returned by TLN_Init().</param>
         /// <returns><see langword="true"/> if successful or <see langword="false"/> if an invalid context reference is supplied.</returns>
         [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void TLN_SetTargetFPS(int fps);
+        public static extern void TLN_SetTargetFps(int fps);
 
         /// <summary>
         /// Retrieves the number of FPS.
         /// </summary>
         /// <returns>The number of FPS.</returns>
         [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int TLN_GetNumObjects();
+        public static extern int TLN_GetTargetFps();
 
         /// <summary>
         /// Returns the width in pixels of the framebuffer.
