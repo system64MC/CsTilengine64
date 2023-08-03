@@ -51,16 +51,16 @@ namespace Tilengine
         private static Engine _engineInstance;
         private static bool init = false;
         private IntPtr _engineAddr;
-        private Layer[] _layers;
-        private Sprite[] _sprites;
-        private Animation[] _animations;
+        private Layer[] _layers = null!;
+        private Sprite[] _sprites = null!;
+        private Animation[] _animations = null!;
         public Layer[] Layers { get { return _layers; } }
         public Sprite[] Sprites { get { return _sprites; } }
         public Animation[] Animations { get { return _animations; } }
 
         public static Engine? Instance { get { return init ? _engineInstance : null; } }
 
-        public Engine(int hres = 384, int vres = 216, int numLayers = 3, int numSprites = 64, int numAnimations = 64, int fps = 60)
+        public Engine(int hres = 384, int vres = 216, int numLayers = 3, int numSprites = 64, int numAnimations = 64, int fps = 60, string loadPath = null!)
         {
             // _engineAddr = TLN_Init(hres, vres, numLayers, numSprites, numAnimations);
             // _layers = new Layer[numLayers];
@@ -82,7 +82,6 @@ namespace Tilengine
                 _layers = new Layer[numLayers];
                 _sprites = new Sprite[numSprites];
                 _animations = new Animation[numAnimations];
-
                 for (int i = 0; i < numLayers; i++)
                     _layers[i] = new Layer(i);
 
@@ -94,45 +93,14 @@ namespace Tilengine
                 _engineInstance = this;
                 init = true;
                 TLN_SetTargetFps(fps);
+                if(loadPath != null)
+                    LoadPath = loadPath;
             }
         }
 
-        public Engine(Vector2 windowDimentions, int numLayers = 3, int numSprites = 64, int numAnimations = 64, int fps = 60)
-        {
-            // _engineAddr = TLN_Init(hres, vres, numLayers, numSprites, numAnimations);
-            // _layers = new Layer[numLayers];
-            // _sprites = new Sprite[numSprites];
-            // _animations = new Animation[numAnimations];
+        public Engine(Vector2 windowDimentions, int numLayers = 3, int numSprites = 64, int numAnimations = 64, int fps = 60, string loadPath = null!)
+            : this((int)windowDimentions.X, (int)windowDimentions.Y, numLayers, numSprites, numAnimations, fps, loadPath) {}
 
-            // for(int i = 0; i < numLayers; i++)
-            //     _layers[i] = new Layer(i);
-
-            // for(int i = 0; i < numSprites; i++)
-            //     _sprites[i] = new Sprite(i);
-
-            // for(int i = 0; i < numAnimations; i++)
-            //     _animations[i] = new Animation(i);
-            // _instance = this;
-            if (!init)
-            {
-                _engineAddr = TLN_Init((int)windowDimentions.X, (int)windowDimentions.Y, numLayers, numSprites, numAnimations);
-                _layers = new Layer[numLayers];
-                _sprites = new Sprite[numSprites];
-                _animations = new Animation[numAnimations];
-
-                for (int i = 0; i < numLayers; i++)
-                    _layers[i] = new Layer(i);
-
-                for (int i = 0; i < numSprites; i++)
-                    _sprites[i] = new Sprite(i);
-
-                for (int i = 0; i < numAnimations; i++)
-                    _animations[i] = new Animation(i);
-                _engineInstance = this;
-                init = true;
-                TLN_SetTargetFps(fps);
-            }
-        }
         public uint NumObjects { get { return TLN_GetNumObjects(); } }
         public int numLayers { get { return TLN_GetNumLayers(); } }
         public int NumSprites { get { return TLN_GetNumSprites(); } }
@@ -176,7 +144,7 @@ namespace Tilengine
         public string LoadPath { set { TLN_SetLoadPath(value); } }
         public BlendFunction BlendFunction { set { TLN_SetCustomBlendFunction(value); } }
         public LogLevel LogLevel { set { TLN_SetLogLevel(value); } }
-        public bool OpenResourcePack(string filename, string? key = null)
+        public bool OpenResourcePack(string filename, string key = null!)
         {
             return TLN_OpenResourcePack(filename, key);
         }

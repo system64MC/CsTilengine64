@@ -155,7 +155,7 @@ namespace Tilengine
         public int Fps { get => fps; set => fps = value; }
         public string LoadPath { get => loadPath; set => loadPath = value; }
 
-        public EngineArgs(int hres = 384, int vres = 216, int numLayers = 3, int numSprites = 64, int numAnimations = 64, int fps = 60, string loadPath = null)
+        public EngineArgs(int hres = 384, int vres = 216, int numLayers = 3, int numSprites = 64, int numAnimations = 64, int fps = 60, string loadPath = null!)
         {
             this.Hres = hres;
             this.Vres = vres;
@@ -163,14 +163,43 @@ namespace Tilengine
             this.NumSprites = numSprites;
             this.NumAnimations = numAnimations;
             this.Fps = fps;
-            this.LoadPath = loadPath ?? this.LoadPath;
+            if(loadPath != null)
+                this.loadPath = loadPath;
+            else
+                this.loadPath = "";
         }
         public EngineArgs(Vector2 resolution, int numLayers, int numSprites, int numAnimations, int fps, string loadPath) : this((int)resolution.X, (int)resolution.Y, numLayers, numSprites, numAnimations, fps, loadPath) { }
-        public EngineArgs() : this(384, 216, 3, 64, 64, 60, null) { }
+        public EngineArgs() : this(384, 216, 3, 64, 64, 60, null!) { }
+
+        // equality operator
+        public static bool operator ==(EngineArgs a, EngineArgs b) => a.Equals(b);
+        public static bool operator !=(EngineArgs a, EngineArgs b) => !a.Equals(b);
+
+        #pragma warning disable CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
+        public override bool Equals(object obj)
+        #pragma warning restore CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
+        {
+            if (obj is EngineArgs other)
+            {
+                return this.Hres == other.Hres &&
+                    this.Vres == other.Vres &&
+                    this.NumLayers == other.NumLayers &&
+                    this.NumSprites == other.NumSprites &&
+                    this.NumAnimations == other.NumAnimations &&
+                    this.Fps == other.Fps &&
+                    this.LoadPath == other.LoadPath;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 
 
-    sealed class Ref<T>
+    public class Ref<T>
     {
         private Func<T> getter;
         private Action<T> setter;
@@ -184,23 +213,49 @@ namespace Tilengine
             get { return getter(); }
             set { setter(value); }
         }
+        // implicit conversion to nullable T
+        public static implicit operator T?(Ref<T> r) => r.Value;
     }
 
     public struct Window
     {
         private bool _init = false;
-        private CancellationTokenSource _loop;
+        private CancellationTokenSource? _loop = new CancellationTokenSource();
         private bool _threaded = false;
         private Engine? _engine;
-        private Ref<Engine> _engineRef;
-        public ref Engine Engine { get { return ref (_engine ?? _engineRef.Value); } }
+        private Ref<Engine>? _engineRef = null;
+        private void SetEngine(Engine engine)
+        {
+            _engine = engine;
+        }
+        private Engine GetEngine()
+        {
+            #pragma warning disable CS8629
+            return _engine.Value;
+            // throws an error if engine is null, so it is not a safe getter
+            // for our purposes, however, it just replaces a lambda
+            #pragma warning restore CS8629
+        }
+        public Ref<Engine> Engine
+        {
+            get
+            {
+                if(_engine == null)
+                {
+                    return _engineRef ?? new Ref<Engine>(GetEngine, SetEngine);
+                }
+                return new Ref<Engine>(GetEngine, SetEngine);
+            }
+        }
         public static List<Window> Instances { get; private set; } = new List<Window>();
         public delegate void FrameEvent(Window window, FrameArgs e);
-        public event FrameEvent BeforeFrame;
-        public event FrameEvent AfterFrame;
+        public event FrameEvent BeforeFrame = delegate { };
+        public event FrameEvent AfterFrame = delegate { };
         private EngineArgs _engineArgs;
         public Window() : this(engineArgs: new EngineArgs()) { }
-        public Window(EngineArgs? engineArgs = default(EngineArgs), WindowFlags flags = (WindowFlags.S2 | WindowFlags.NOVSYNC), bool threaded = false, string title = null, string overlay = null, bool autostart = true)
+        public Window(EngineArgs engineArgs = default, WindowFlags flags = (WindowFlags.S2 | WindowFlags.NOVSYNC), bool threaded = false, string title = null!, string overlay = null!, bool autostart = true)
+            : this(engineArgs as EngineArgs?, flags, threaded, title, overlay, autostart) { }
+        public Window(EngineArgs? engineArgs, WindowFlags flags = (WindowFlags.S2 | WindowFlags.NOVSYNC), bool threaded = false, string title = null!, string overlay = null!, bool autostart = true)
         {
             if (!_init)
             {
@@ -214,9 +269,9 @@ namespace Tilengine
                     _engine = new Engine(_engineArgs.Hres, _engineArgs.Vres, _engineArgs.NumLayers, _engineArgs.NumSprites, _engineArgs.NumAnimations, _engineArgs.Fps, _engineArgs.LoadPath);
                 }
                 if (!threaded)
-                    TLN_CreateWindow(overlay, flags);
+                    TLN_CreateWindow(overlay ?? "", flags);
                 else
-                    TLN_CreateWindowThread(overlay, flags);
+                    TLN_CreateWindowThread(overlay ?? "", flags);
                 _threaded = threaded;
                 Instances.Add(this);
                 _init = true;
@@ -251,21 +306,18 @@ namespace Tilengine
         public string Title { set { TLN_SetWindowTitle(value); } }
         public bool Process { get { return TLN_ProcessWindow(); } }
         public bool Active { get { return TLN_IsWindowActive(); } }
-        public bool SetManagedEngine(ref Engine engine)
+        public bool DeleteManagedEngine()
         {
-            if (engine == null)
+            if (_engineRef != null)
             {
-                if (_engineRef != null)
-                {
-                    _engineRef = null;
-                    return true;
-                }
-                return false;
+                _engineRef = null;
+                return true;
             }
-            if (_engine != null)
-            {
-                _engine.Value.Delete();
-            }
+            return false;
+        }
+        public bool SetManagedEngine(Ref<Engine> engine)
+        {
+            _engine?.Delete();
             _engine = null;
             _engineRef = engine;
             return true;
@@ -303,6 +355,7 @@ namespace Tilengine
             TLN_DeleteWindow();
             _init = false;
         }
+        [Obsolete("Use EnableCrt instead")]
         public bool Blur { set { TLN_EnableBlur(value); } }
         public void ConfigCrt(CRT type, bool blur)
         {
@@ -330,8 +383,6 @@ namespace Tilengine
         {
             if (_loop != null)
                 return;
-            if (!_init)
-                Window();
             _loop = new CancellationTokenSource();
             Task task = new Task(Loop, _loop.Token);
         }
@@ -344,7 +395,7 @@ namespace Tilengine
             return new FrameArgs()
             {
                 // TODO: collect relevant data
-            }
+            };
         }
         private async void Loop()
         {
@@ -363,7 +414,7 @@ namespace Tilengine
                 {
                     DrawFrame(0);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     // TODO: handle exception
                     // ensure it doesn't happen again, or at least not too often

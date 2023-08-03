@@ -50,14 +50,14 @@ namespace Tilengine
         private IntPtr _tilemapAddr;
 
         // For loading a tilemap from file
-        public static Tilemap LoadTilemap(string fileName, string? layerName = null)
+        public static Tilemap LoadTilemap(string fileName, string layerName = null!)
         {
             Tilemap tmap;
             tmap._tilemapAddr = TLN_LoadTilemap(fileName, layerName);
             return tmap;
         }
 
-        public Tilemap(string fileName, string? layerName = null)
+        public Tilemap(string fileName, string layerName = null!)
         {
             _tilemapAddr = TLN_LoadTilemap(fileName, layerName);
         }
