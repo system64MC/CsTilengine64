@@ -37,7 +37,6 @@
 
 #region Using Statements
 
-using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Threading;
@@ -598,47 +597,47 @@ namespace Tilengine
         /// <summary>
         /// Blending disabled
         /// </summary>
-        BLEND_NONE,
+        NONE,
 
         /// <summary>
         /// Color averaging 1
         /// </summary>
-        BLEND_MIX25,
+        MIX25,
 
         /// <summary>
         /// Color averaging 2
         /// </summary>
-        BLEND_MIX50,
+        MIX50,
 
         /// <summary>
         /// Color averaging 3
         /// </summary>
-        BLEND_MIX75,
+        MIX75,
 
         /// <summary>
         /// Color is always brighter (simulate light effects)
         /// </summary>
-        BLEND_ADD,
+        ADD,
 
         /// <summary>
         /// Color is always darker (simulate shadow effects)
         /// </summary>
-        BLEND_SUB,
+        SUB,
 
         /// <summary>
         /// Color is always darker (simulate shadow effects)
         /// </summary>
-        BLEND_MOD,
+        MOD,
 
         /// <summary>
         /// User provided blend function with <see cref="TLN_SetCustomBlendFunction"/>
         /// </summary>
-        BLEND_CUSTOM,
+        CUSTOM,
 
         /// <summary>
         /// Color averaging
         /// </summary>
-        BLEND_MIX = BLEND_MIX50
+        MIX = MIX50
     }
 
     /// <summary>
@@ -649,22 +648,22 @@ namespace Tilengine
         /// <summary>
         /// Undefined
         /// </summary>
-        LAYER_NONE,
+        NONE,
 
         /// <summary>
         /// Tilemap-based layer
         /// </summary>
-        LAYER_TILE,
+        TILE,
 
         /// <summary>
         /// Objects layer
         /// </summary>
-        LAYER_OBJECT,
+        OBJECT,
 
         /// <summary>
         /// Bitmapped layer
         /// </summary>
-        LAYER_BITMAP
+        BITMAP
     }
 
     /// <summary>
@@ -675,27 +674,27 @@ namespace Tilengine
         /// <summary>
         /// No overlay
         /// </summary>
-        TLN_OVERLAY_NONE,
+        NONE,
 
         /// <summary>
         /// Shadow mask pattern
         /// </summary>
-        TLN_OVERLAY_SHADOWMASK,
+        SHADOWMASK,
 
         /// <summary>
         /// Aperture grille pattern
         /// </summary>
-        TLN_OVERLAY_APERTURE,
+        APERTURE,
 
         /// <summary>
         /// Scanlines pattern
         /// </summary>
-        TLN_OVERLAY_SCANLINES,
+        SCANLINES,
 
         /// <summary>
         /// User-provided when calling <see cref="TLN_CreateWindow"/>
         /// </summary>
-        TLN_OVERLAY_CUSTOM,
+        CUSTOM,
     }
 
     [Flags]
@@ -704,47 +703,47 @@ namespace Tilengine
         /// <summary>
         /// Create a fullscreen window.
         /// </summary>
-        CWF_FULLSCREEN = 1 << 0,
+        FULLSCREEN = 1 << 0,
 
         /// <summary>
         /// Sync frame updates with vertical retrace.
         /// </summary>
-        CWF_VSYNC = 1 << 1,
+        VSYNC = 1 << 1,
 
         /// <summary>
         /// Create a window of the same size as the frame buffer.
         /// </summary>
-        CWF_S1 = 1 << 2,
+        S1 = 1 << 2,
 
         /// <summary>
         /// Create a window 2x the size of the frame buffer.
         /// </summary>
-        CWF_S2 = 2 << 2,
+        S2 = 2 << 2,
 
         /// <summary>
         /// Create a window 3x the size of the frame buffer.
         /// </summary>
-        CWF_S3 = 3 << 2,
+        S3 = 3 << 2,
 
         /// <summary>
         /// Create a window 4x the size of the frame buffer.
         /// </summary>
-        CWF_S4 = 4 << 2,
+        S4 = 4 << 2,
 
         /// <summary>
         /// Create a window 5x the size of the frame buffer.
         /// </summary>
-        CWF_S5 = 5 << 2,
+        S5 = 5 << 2,
 
         /// <summary>
         /// Unfiltered scaling
         /// </summary>
-        CWF_NEAREST = 1 << 6,
+        NEAREST = 1 << 6,
 
         /// <summary>
         /// disable default vsync
         /// </summary>
-        CWF_NOVSYNC = 1 << 7,
+        NOVSYNC = 1 << 7,
     }
 
     public enum Error
@@ -752,97 +751,97 @@ namespace Tilengine
         /// <summary>
         /// No error.
         /// </summary>
-        TLN_ERR_OK,
+        OK,
 
         /// <summary>
         /// Not enough memory.
         /// </summary>
-        TLN_ERR_OUT_OF_MEMORY,
+        OUT_OF_MEMORY,
 
         /// <summary>
         /// Layer index out of range.
         /// </summary>
-        TLN_ERR_IDX_LAYER,
+        IDX_LAYER,
 
         /// <summary>
         /// Sprite index out of range.
         /// </summary>
-        TLN_ERR_IDX_SPRITE,
+        IDX_SPRITE,
 
         /// <summary>
         /// Animation index out of range.
         /// </summary>
-        TLN_ERR_IDX_ANIMATION,
+        IDX_ANIMATION,
 
         /// <summary>
         /// Picture or tile index out of range.
         /// </summary>
-        TLN_ERR_IDX_PICTURE,
+        IDX_PICTURE,
 
         /// <summary>
         /// Invalid IntPtr reference.
         /// </summary>
-        TLN_ERR_REF_TILESET,
+        REF_TILESET,
 
         /// <summary>
         /// Invalid TLN_Tilemap reference.
         /// </summary>
-        TLN_ERR_REF_TILEMAP,
+        REF_TILEMAP,
 
         /// <summary>
         /// Invalid IntPtr reference.
         /// </summary>
-        TLN_ERR_REF_SPRITESET,
+        REF_SPRITESET,
 
         /// <summary>
         /// Invalid IntPtr reference.
         /// </summary>
-        TLN_ERR_REF_PALETTE,
+        REF_PALETTE,
 
         /// <summary>
         /// Invalid TLN_Sequence reference.
         /// </summary>
-        TLN_ERR_REF_SEQUENCE,
+        REF_SEQUENCE,
 
         /// <summary>
         /// Invalid TLN_SequencePack reference.
         /// </summary>
-        TLN_ERR_REF_SEQPACK,
+        REF_SEQPACK,
 
         /// <summary>
         /// Invalid TLN_Bitmap reference.
         /// </summary>
-        TLN_ERR_REF_BITMAP,
+        REF_BITMAP,
 
         /// <summary>
         /// Null pointer as argument.
         /// </summary>
-        TLN_ERR_NULL_POINTER,
+        NULL_POINTER,
 
         /// <summary>
         /// Resource file not found.
         /// </summary>
-        TLN_ERR_FILE_NOT_FOUND,
+        FILE_NOT_FOUND,
 
         /// <summary>
         /// Resource file has invalid format.
         /// </summary>
-        TLN_ERR_WRONG_FORMAT,
+        WRONG_FORMAT,
 
         /// <summary>
         /// A width or height parameter is invalid.
         /// </summary>
-        TLN_ERR_WRONG_SIZE,
+        WRONG_SIZE,
 
         /// <summary>
         /// Unsupported function.
         /// </summary>
-        TLN_ERR_UNSUPPORTED,
+        UNSUPPORTED,
 
         /// <summary>
         /// Invalid TLN_ObjectList reference.
         /// </summary>
-        TLN_ERR_REF_LIST
+        REF_LIST
     }
 
     public enum LogLevel
@@ -850,17 +849,17 @@ namespace Tilengine
         /// <summary>
         /// Don't print anything. (default)
         /// </summary>
-        TLN_LOG_NONE,
+        NONE,
 
         /// <summary>
         /// Print only runtime errors.
         /// </summary>
-        TLN_LOG_ERRORS,
+        ERRORS,
 
         /// <summary>
         /// Print everything.
         /// </summary>
-        TLN_LOG_VERBOSE,
+        VERBOSE,
     }
 
     #endregion
@@ -880,7 +879,7 @@ namespace Tilengine
     /// <summary>
     /// Player index for input assignment functions.
     /// </summary>
-    public enum TLN_Player
+    public enum Player
     {
         PLAYER1,
         PLAYER2,
@@ -892,133 +891,133 @@ namespace Tilengine
     /// Standard inputs query for <see cref="TLN_GetInput"/>.
     /// Up to 32 unique inputs.
     /// </summary>
-    public enum TLN_Input
+    public enum Input
     {
         /// <summary>
         /// No input
         /// </summary>
-        INPUT_NONE,
+        NONE,
 
         /// <summary>
         /// Up direction
         /// </summary>
-        INPUT_UP,
+        UP,
 
         /// <summary>
         /// Down direction
         /// </summary>
-        INPUT_DOWN,
+        DOWN,
 
         /// <summary>
         /// Left direction
         /// </summary>
-        INPUT_LEFT,
+        LEFT,
 
         /// <summary>
         /// Right direction
         /// </summary>
-        INPUT_RIGHT,
+        RIGHT,
 
         /// <summary>
         /// 1st action button
         /// </summary>
-        INPUT_BUTTON1,
+        BUTTON1,
 
         /// <summary>
         /// 2nd action button
         /// </summary>
-        INPUT_BUTTON2,
+        BUTTON2,
 
         /// <summary>
         /// 3th action button
         /// </summary>
-        INPUT_BUTTON3,
+        BUTTON3,
 
         /// <summary>
         /// 4th action button
         /// </summary>
-        INPUT_BUTTON4,
+        BUTTON4,
 
         /// <summary>
         /// 5th action button
         /// </summary>
-        INPUT_BUTTON5,
+        BUTTON5,
 
         /// <summary>
         /// 6th action button
         /// </summary>
-        INPUT_BUTTON6,
+        BUTTON6,
 
         /// <summary>
         /// Start button
         /// </summary>
-        INPUT_START,
+        START,
 
         /// <summary>
         /// Window close (only Player 1 keyboard)
         /// </summary>
-        INPUT_QUIT,
+        QUIT,
 
         /// <summary>
         /// CRT toggle (only Player 1 keyboard)
         /// </summary>
-        INPUT_CRT,
+        CRT,
 
         /// <summary>
         /// Request player 1 input (default)
         /// </summary>
-        INPUT_P1 = TLN_Player.PLAYER1,
+        P1 = Player.PLAYER1,
 
         /// <summary>
         /// Request player 2 input
         /// </summary>
-        INPUT_P2 = TLN_Player.PLAYER2 << 5,
+        P2 = Player.PLAYER2 << 5,
 
         /// <summary>
         /// Request player 3 input
         /// </summary>
-        INPUT_P3 = TLN_Player.PLAYER3 << 5,
+        P3 = Player.PLAYER3 << 5,
 
         /// <summary>
         /// Request player 4 input
         /// </summary>
-        INPUT_P4 = TLN_Player.PLAYER4 << 5,
+        P4 = Player.PLAYER4 << 5,
 
         /// <summary>
         /// 1st action button. <br/>
         /// Part of the compatibility symbols for pre-1.18 input model.
         /// </summary>
-        INPUT_A = INPUT_BUTTON1,
+        A = BUTTON1,
 
         /// <summary>
         /// 2nd action button. <br/>
         /// Part of the compatibility symbols for pre-1.18 input model.
         /// </summary>
-        INPUT_B = INPUT_BUTTON2,
+        B = BUTTON2,
 
         /// <summary>
         /// 3th action button. <br/>
         /// Part of the compatibility symbols for pre-1.18 input model.
         /// </summary>
-        INPUT_C = INPUT_BUTTON3,
+        C = BUTTON3,
 
         /// <summary>
         /// 4th action button.
         /// Part of the compatibility symbols for pre-1.18 input model.
         /// </summary>
-        INPUT_D = INPUT_BUTTON4,
+        D = BUTTON4,
 
         /// <summary>
         /// 5th action button. <br/>
         /// Part of the compatibility symbols for pre-1.18 input model.
         /// </summary>
-        INPUT_E = INPUT_BUTTON5,
+        E = BUTTON5,
 
         /// <summary>
         /// 6th action button. <br/>
         /// Part of the compatibility symbols for pre-1.18 input model.
         /// </summary>
-        INPUT_F = INPUT_BUTTON6,
+        F = BUTTON6,
     }
 
     #endregion
@@ -1386,7 +1385,7 @@ namespace Tilengine
             var lastError = TLN_GetLastError();
 
             // If there is no error, return an empty string.
-            if (lastError == Error.TLN_ERR_OK)
+            if (lastError == Error.OK)
             {
                 return string.Empty;
             }
@@ -1507,13 +1506,13 @@ namespace Tilengine
         ///     </para>
         /// </remarks>
         /// <param name="id">
-        /// Input to check state. It should be an attribute from <see cref="TLN_Input"/><br/>
+        /// Input to check state. It should be an attribute from <see cref="Input"/><br/>
         /// Combine this with INPUT_P1 to INPUT_P4 to request input from a specific player.
         /// </param>
         /// <returns><see langword="true"/> if the provided input is pressed, otherwise false.</returns>
         [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAsAttribute(UnmanagedType.I1)]
-        internal static extern bool TLN_GetInput(TLN_Input id);
+        internal static extern bool TLN_GetInput(Input id);
 
         [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
         internal static extern void TLN_SetWindowScaleFactor(int factor);
@@ -1528,7 +1527,7 @@ namespace Tilengine
         /// <param name="player">Player number to toggle (PLAYER1 - PLAYER4)</param>
         /// <param name="enable"><see langword="true"/> to enable, <see langword="false"/> to disable.</param>
         [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void TLN_EnableInput(TLN_Player player, bool enable);
+        internal static extern void TLN_EnableInput(Player player, bool enable);
 
         /// <summary>
         /// Assigns a joystick index to the specified player.
@@ -1536,7 +1535,7 @@ namespace Tilengine
         /// <param name="player">Player number to configure (PLAYER1 - PLAYER4)</param>
         /// <param name="index">Joystick index to assign, 0-based index. -1 = disable</param>
         [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void TLN_AssignInputJoystick(TLN_Player player, int index);
+        internal static extern void TLN_AssignInputJoystick(Player player, int index);
 
         /// <summary>
         /// Assigns a keyboard input to a player.
@@ -1545,7 +1544,7 @@ namespace Tilengine
         /// <param name="input">Input to associate to the given key.</param>
         /// <param name="keycode">ASCII key value or scancode as defined in SDL.h</param>
         [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void TLN_DefineInputKey(TLN_Player player, TLN_Input input, uint keycode);
+        internal static extern void TLN_DefineInputKey(Player player, Input input, uint keycode);
 
         /// <summary>
         /// Assigns a button joystick input to a player.
@@ -1554,7 +1553,7 @@ namespace Tilengine
         /// <param name="input">Input to associate to the given button</param>
         /// <param name="joy_button">Button index</param>
         [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void TLN_DefineInputButton(TLN_Player player, TLN_Input input, byte joy_button);
+        internal static extern void TLN_DefineInputButton(Player player, Input input, byte joy_button);
 
         /// <summary>
         /// Draws a frame to the window
@@ -2168,7 +2167,7 @@ namespace Tilengine
         /// <param name="index">Index of the palette entry to obtain (0-255)</param>
         /// <returns>32-bit integer with the packed color in internal pixel format RGBA.</returns>
         [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern uint TLN_GetPaletteData(IntPtr palette, int index);
+        internal static extern IntPtr TLN_GetPaletteData(IntPtr palette, int index);
 
         /// <summary>
         /// Deletes the specified palette and frees up memory.
@@ -3428,748 +3427,11 @@ namespace Tilengine
         }
     }
 
-    public struct Layer
-    {
-        private int _index;
-        public Layer(int index)
-        {
-            _index = index;
-        }
-        public int Index
-        { get { return _index; } }
-
-        public Tileset Tileset
-        {
-            get
-            {
-                return new Tileset(TLN_GetLayerTileset(_index));
-            }
-        }
-
-        public Tilemap Tilemap
-        {
-            get
-            {
-                return new Tilemap(TLN_GetLayerTilemap(_index));
-            }
-            set
-            {
-                TLN_SetLayerTilemap(_index, value.Tmap);
-            }
-        }
-        public Bitmap Bitmap
-        {
-            get
-            {
-                return new Bitmap(TLN_GetLayerBitmap(_index));
-            }
-            set
-            {
-                TLN_SetLayerBitmap(_index, value.Bmap);
-            }
-        }
-        public Palette Palette
-        {
-            get
-            {
-                return new Palette(TLN_GetLayerPalette(_index));
-            }
-            set
-            {
-                TLN_SetLayerPalette(_index, value.Pal);
-            }
-        }
-        public int X
-        {
-            get { return TLN_GetLayerX(_index); }
-            set
-            {
-                var y = TLN_GetLayerY(_index);
-                TLN_SetLayerPosition(_index, value, y);
-            }
-        }
-        public int Y { get { return TLN_GetLayerY(_index); } set { TLN_SetLayerPosition(_index, TLN_GetLayerX(_index), value); } }
-        public bool SetPosition(int x, int y)
-        {
-            return TLN_SetLayerPosition(_index, x, y);
-        }
-        public Vector2 Position
-        {
-            get { return new Vector2(TLN_GetLayerX(_index), TLN_GetLayerY(_index)); }
-            set { TLN_SetLayerPosition(_index, (int)value.X, (int)value.Y); }
-        }
-        public bool SetScaling(int scaleX, int scaleY)
-        {
-            return TLN_SetLayerScaling(_index, scaleX, scaleY);
-        }
-        public Affine Affine
-        {
-            set { TLN_SetLayerAffineTransform(_index, value); }
-        }
-        public bool SetTransform(float angle, float dx, float dy, float sx, float sy)
-        {
-            return TLN_SetLayerTransform(_index, angle, dx, dy, sx, sy);
-        }
-        public PixelMap[] PixelMapping
-        {
-            set { TLN_SetLayerPixelMapping(_index, value); }
-        }
-        public bool SetBlendMode(Blend mode, byte factor)
-        {
-            return TLN_SetLayerBlendMode(_index, mode, factor);
-        }
-        public int[] ColumnOffset
-        {
-            set { TLN_SetLayerColumnOffset(_index, value); }
-        }
-        public bool SetClip(int x1, int y1, int x2, int y2)
-        {
-            return TLN_SetLayerClip(_index, x1, y1, x2, y2);
-        }
-        public bool DisableClip()
-        {
-            return TLN_DisableLayerClip(_index);
-        }
-        public bool SetWindow(int x1, int y1, int x2, int y2, bool invert)
-        {
-            return TLN_SetLayerWindow(_index, x1, y1, x2, y2, invert);
-        }
-        public bool SetWindowColor(byte r, byte g, byte b, Blend blend)
-        {
-            return TLN_SetLayerWindowColor(_index, r, g, b, blend);
-        }
-        public bool SetWindowColor(Color color, Blend blend)
-        {
-            return TLN_SetLayerWindowColor(_index, color.r, color.g, color.b, blend);
-        }
-        public bool DisableWindow()
-        {
-            return TLN_DisableLayerWindow(_index);
-        }
-        public bool DisableWindowColor()
-        {
-            return TLN_DisableLayerWindowColor(_index);
-        }
-        public bool SetMosaic(int width, int height)
-        {
-            return TLN_SetLayerMosaic(_index, width, height);
-        }
-        public bool DisableMosaic()
-        {
-            return TLN_DisableLayerMosaic(_index);
-        }
-        public bool ResetMode()
-        {
-            return TLN_ResetLayerMode(_index);
-        }
-        public ObjectList Objects
-        {
-            get { return new ObjectList(TLN_GetLayerObjects(_index)); }
-        }
-        public bool SetObjects(ObjectList list, Tileset tileset)
-        {
-            return TLN_SetLayerObjects(_index, list.ObjList, tileset.Tset);
-        }
-        public bool Priority
-        {
-            set { TLN_SetLayerPriority(_index, value); }
-        }
-        public Layer Parent
-        {
-            set { TLN_SetLayerParent(_index, value.Index); }
-        }
-        public bool DisableParent()
-        {
-            return TLN_DisableLayerParent(_index);
-        }
-        public bool Enabled
-        {
-            set
-            {
-                if (value)
-                    TLN_EnableLayer(_index);
-                else
-                    TLN_DisableLayer(_index);
-            }
-        }
-        public LayerType Type
-        {
-            get { return TLN_GetLayerType(_index); }
-        }
-        public TileInfo GetTile(int x, int y)
-        {
-            var infos = new TileInfo();
-            TLN_GetLayerTile(_index, x, y, out infos);
-            return infos;
-        }
-        public int Width
-        {
-            get { return TLN_GetLayerWidth(_index); }
-        }
-        public int Height
-        {
-            get { return TLN_GetLayerHeight(_index); }
-        }
-    }
-
-    public struct Palette
-    {
-        private IntPtr _paletteAddr;
-        public IntPtr Pal { get { return _paletteAddr; } }
-        public Palette(int entries)
-        {
-            _paletteAddr = TLN_CreatePalette(entries);
-        }
-        public Palette(string filename)
-        {
-            _paletteAddr = TLN_LoadPalette(filename);
-        }
-
-        public Palette(IntPtr paletteAddr)
-        {
-            _paletteAddr = paletteAddr;
-        }
-
-        public static Palette LoadPalette(string filename)
-        {
-            return new Palette(TLN_LoadPalette(filename));
-        }
-
-        public Palette clone()
-        {
-            return new Palette(TLN_ClonePalette(_paletteAddr));
-        }
-
-        public bool SetColor(int index, byte r, byte g, byte b)
-        {
-            return TLN_SetPaletteColor(_paletteAddr, index, r, g, b);
-        }
-        public bool SetColor(int index, Color color)
-        {
-            return TLN_SetPaletteColor(_paletteAddr, index, color.r, color.g, color.b); ;
-        }
-
-        public bool Mix(Palette src1, Palette src2, byte factor)
-        {
-            return TLN_MixPalettes(src1.Pal, src2.Pal, _paletteAddr, factor);
-        }
-
-        public bool AddColor(byte r, byte g, byte b, byte startIndex, byte range)
-        {
-            return TLN_AddPaletteColor(_paletteAddr, r, g, b, startIndex, range);
-        }
-        public bool AddColor(Color color, byte startIndex, byte range)
-        {
-            return TLN_AddPaletteColor(_paletteAddr, color.r, color.g, color.b, startIndex, range);
-        }
-
-        public bool SubColor(byte r, byte g, byte b, byte startIndex, byte range)
-        {
-            return TLN_SubPaletteColor(_paletteAddr, r, g, b, startIndex, range);
-        }
-        public bool SubColor(Color color, byte startIndex, byte range)
-        {
-            return TLN_SubPaletteColor(_paletteAddr, color.r, color.g, color.b, startIndex, range);
-        }
-
-        public bool ModColor(byte r, byte g, byte b, byte startIndex, byte range)
-        {
-            return TLN_ModPaletteColor(_paletteAddr, r, g, b, startIndex, range);
-        }
-        public bool ModColor(Color color, byte startIndex, byte range)
-        {
-            return TLN_ModPaletteColor(_paletteAddr, color.r, color.g, color.b, startIndex, range);
-        }
-
-        public Color GetData(int index)
-        {
-            Color color = new Color();
-            unsafe
-            {
-                var myPtr = (byte*)(TLN_GetPaletteData(_paletteAddr, index));
-                if (myPtr == null)
-                {
-                    throw new Exception("Palette Index out of bounds.");
-                }
-                color.r = *myPtr;
-                color.g = *(myPtr + 1);
-                color.b = *(myPtr + 2);
-            }
-            return color;
-        }
-        public bool SetAnimation(int index, Sequence sequence, bool blend)
-        {
-            return TLN_SetPaletteAnimation(index, _paletteAddr, sequence.Seq, blend);
-        }
-        public int AnimationSource
-        {
-            set { TLN_SetPaletteAnimationSource(value, _paletteAddr); }
-        }
-        public void Delete()
-        {
-            TLN_DeletePalette(_paletteAddr);
-            _paletteAddr = IntPtr.Zero;
-        }
-
-    }
-
-    public struct Bitmap
-    {
-        private IntPtr _bitmapAddr;
-        public IntPtr Bmap { get { return _bitmapAddr; } set { _bitmapAddr = value; } }
-
-        public Bitmap(int width, int height, int bpp)
-        {
-            _bitmapAddr = TLN_CreateBitmap(width, height, bpp);
-        }
-
-        public Bitmap(string filename)
-        {
-            _bitmapAddr = TLN_LoadBitmap(filename);
-        }
-
-        public Bitmap(IntPtr bitmapAddr)
-        {
-            _bitmapAddr = bitmapAddr;
-        }
-
-        public static Bitmap LoadBitmap(string filename)
-        {
-            return new Bitmap(TLN_LoadBitmap(filename));
-        }
-
-        public int Width { get { return TLN_GetBitmapWidth(_bitmapAddr); } }
-        public int Height { get { return TLN_GetBitmapHeight(_bitmapAddr); } }
-        public int Depth { get { return TLN_GetBitmapDepth(_bitmapAddr); } }
-        public int Pitch { get { return TLN_GetBitmapPitch(_bitmapAddr); } }
-        public Palette Palette
-        {
-            get { return new Palette(TLN_GetBitmapPalette(_bitmapAddr)); }
-            set { TLN_SetBitmapPalette(_bitmapAddr, value.Pal); }
-        }
-        public void SetBitmapColor(int x, int y, byte color)
-        {
-            if (x < 0 || y < 0 || x > this.Width || y > this.Height)
-                return;
-            unsafe
-            {
-                var ptr = (byte*)((TLN_GetBitmapPtr(_bitmapAddr, x, y)).ToPointer());
-                *ptr = color;
-            }
-        }
-
-        public void Delete()
-        {
-            TLN_DeleteBitmap(_bitmapAddr);
-            _bitmapAddr = IntPtr.Zero;
-        }
-
-        public static bool operator ==(Bitmap bitmap, object obj)
-        {
-            if (obj == null)
-                return bitmap._bitmapAddr == IntPtr.Zero;
-
-            if (obj is Bitmap otherBitmap)
-                return bitmap._bitmapAddr == otherBitmap._bitmapAddr;
-
-            return false;
-        }
-
-        public static bool operator !=(Bitmap bitmap, object obj)
-        {
-            return !(bitmap == obj);
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is Bitmap otherBitmap)
-                return this._bitmapAddr == otherBitmap._bitmapAddr;
-
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return _bitmapAddr.GetHashCode();
-        }
-    }
-
-    public struct SequencePack
-    {
-        private IntPtr _seqPackAddr;
-        public IntPtr Seq { get { return _seqPackAddr; } set { _seqPackAddr = value; } }
-        public SequencePack(IntPtr seqPackAddr)
-        {
-            _seqPackAddr = seqPackAddr;
-        }
-    }
-
     public struct TileImage
     {
         public Bitmap Bitmap;
         public UInt16 Id;
         public Byte Type;
-    }
-
-    public struct Tileset
-    {
-        private IntPtr _tilesetAddr;
-        public IntPtr Tset
-        {
-            get { return _tilesetAddr; }
-            //set { _tilesetAddr = value; } 
-        }
-
-        public Tileset(IntPtr tilesetAddr) { _tilesetAddr = tilesetAddr; }
-
-        public Tileset(int numTiles, int width, int height, Palette palette, SequencePack sp, TileAttribute[] attributes)
-        {
-            _tilesetAddr = TLN_CreateTileset(numTiles, width, height, palette.Pal, sp.Seq, attributes);
-        }
-        public Tileset(int numTiles, TileImage[] images)
-        {
-            TLN_TileImage[] imgs = new TLN_TileImage[images.Length];
-            for (int i = 0; i < images.Length; i++)
-            {
-                imgs[i].bitmap = images[i].Bitmap.Bmap;
-                imgs[i].type = images[i].Type;
-                imgs[i].id = images[i].Id;
-            }
-            _tilesetAddr = TLN_CreateImageTileset(numTiles, imgs);
-        }
-        public Tileset(string filename)
-        {
-            _tilesetAddr = TLN_LoadTileset(filename);
-        }
-        public static Tileset LoadTileset(string filename)
-        {
-            return new Tileset(TLN_LoadTileset(filename));
-        }
-        public Tileset clone()
-        {
-            return new Tileset(TLN_CloneTileset(_tilesetAddr));
-        }
-        public bool SetTilesetPixels(int entry, byte[] data, int srcPitch)
-        {
-            return TLN_SetTilesetPixels(_tilesetAddr, entry, data, srcPitch);
-        }
-        public int TileWidth { get { return TLN_GetTileWidth(_tilesetAddr); } }
-        public int TileHeight { get { return TLN_GetTileHeight(_tilesetAddr); } }
-        public int NumTiles { get { return TLN_GetTilesetNumTiles(_tilesetAddr); } }
-        public Palette Palette { get { return new Palette(TLN_GetTilesetPalette(_tilesetAddr)); } }
-        public SequencePack SequencePack { get { return new SequencePack(TLN_GetTilesetSequencePack(_tilesetAddr)); } }
-        public void Delete()
-        {
-            TLN_DeleteTileset(_tilesetAddr);
-            _tilesetAddr = IntPtr.Zero;
-        }
-    }
-
-    public struct Tilemap
-    {
-        private IntPtr _tilemapAddr;
-
-        // For loading a tilemap from file
-        public static Tilemap LoadTilemap(string fileName, string? layerName = null)
-        {
-            Tilemap tmap;
-            tmap._tilemapAddr = TLN_LoadTilemap(fileName, layerName);
-            return tmap;
-        }
-
-        public Tilemap(string fileName, string? layerName = null)
-        {
-            _tilemapAddr = TLN_LoadTilemap(fileName, layerName);
-        }
-
-        public Tilemap(IntPtr tilemapAddr)
-        {
-            _tilemapAddr = tilemapAddr;
-        }
-
-        public Tilemap(int rows, int columns, Tile[] tiles, UInt32 bgColor, Tileset tileset)
-        {
-            _tilemapAddr = TLN_CreateTilemap(rows, columns, tiles, bgColor, tileset.Tset);
-        }
-
-        public bool SetLayer(int layer)
-        {
-            return TLN_SetLayerTilemap(layer, _tilemapAddr);
-        }
-
-        public Tilemap Clone()
-        {
-            Tilemap tmap;
-            tmap._tilemapAddr = TLN_CloneTilemap(this._tilemapAddr);
-            return tmap;
-        }
-
-        public void DeleteTilemap()
-        {
-            TLN_DeleteTilemap(_tilemapAddr);
-            this._tilemapAddr = IntPtr.Zero;
-        }
-
-        public IntPtr Tmap { get { return _tilemapAddr; } }
-
-        public int Rows { get { return TLN_GetTilemapRows(_tilemapAddr); } }
-        public int Columns { get { return TLN_GetTilemapCols(_tilemapAddr); } }
-
-        public Tileset Tileset
-        {
-            get
-            {
-                return new Tileset(TLN_GetTilemapTileset(_tilemapAddr));
-                //Tileset tset = new Tileset();
-                //tset.Tset = TLN_GetTilemapTileset(_tilemapAddr);
-                //return tset;
-            }
-
-            set
-            {
-                TLN_SetTilemapTileset(_tilemapAddr, value.Tset);
-            }
-        }
-
-        public bool SetTilesetByIndex(Tileset tileset, int index)
-        {
-            return TLN_SetTilemapTileset2(_tilemapAddr, tileset.Tset, index);
-        }
-
-        public Tileset GetTilesetByIndex(int index)
-        {
-            return new Tileset(TLN_GetTilemapTileset2(_tilemapAddr, index));
-            //tileset.Tset = TLN.TLN_GetTilemapTileset2(_tilemapAddr, index);
-            //return tileset;
-        }
-
-        public Tile GetTile(int row, int column)
-        {
-            Tile tile;
-            bool success = TLN_GetTilemapTile(_tilemapAddr, row, column, out tile);
-            if (!success)
-                tile.index = 0xFFFF;
-            return tile;
-        }
-
-        public bool SetTile(int row, int column, Tile tile)
-        {
-            return TLN_SetTilemapTile(_tilemapAddr, row, column, tile);
-        }
-
-        public bool SetTileAttribute(int row, int column, byte? unused = null, byte? palette = null, byte? tileset = null, bool? masked = null, bool? priority = null, bool? rotated = null, bool? flipy = null, bool? flipx = null)
-        {
-            Tile tile = new();
-            bool success = TLN_GetTilemapTile(_tilemapAddr, row, column, out tile);
-            if (!success)
-                return success;
-            tile.unused = unused ?? tile.unused;
-            tile.palette = palette ?? tile.palette;
-            tile.tileset = tileset ?? tile.tileset;
-            tile.masked = masked ?? tile.masked;
-            tile.priority = priority ?? tile.priority;
-            tile.rotated = rotated ?? tile.rotated;
-            tile.flipy = flipy ?? tile.flipy;
-            tile.flipx = flipx ?? tile.flipx;
-            success = TLN_SetTilemapTile(_tilemapAddr, row, column, in tile);
-            return success;
-        }
-
-        public bool SetBgColor()
-        {
-            return TLN_SetBGColorFromTilemap(_tilemapAddr);
-        }
-
-        public bool CopyTiles(int srcRow, int srcColumn, int rows, int columns, Tilemap destination, int destRow, int destColumn)
-        {
-            return TLN_CopyTiles(_tilemapAddr, srcRow, srcColumn, rows, columns, destination.Tmap, destRow, destColumn);
-        }
-
-        public bool Delete()
-        {
-            bool res = TLN_DeleteBitmap(_tilemapAddr);
-            _tilemapAddr = 0;
-            return res;
-        }
-
-        public static bool operator ==(Tilemap tilemap, object obj)
-        {
-            if (obj == null)
-                return tilemap._tilemapAddr == IntPtr.Zero;
-
-            if (obj is Tilemap otherTilemap)
-                return tilemap._tilemapAddr == otherTilemap._tilemapAddr;
-
-            return false;
-        }
-
-        public static bool operator !=(Tilemap tilemap, object obj)
-        {
-            return !(tilemap == obj);
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is Tilemap otherTilemap)
-                return this._tilemapAddr == otherTilemap._tilemapAddr;
-
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return _tilemapAddr.GetHashCode();
-        }
-    }
-
-    public struct ObjectList
-    {
-        private IntPtr _objListAddr;
-        public IntPtr ObjList { get { return _objListAddr; } }
-        public ObjectList(IntPtr objListAddr)
-        {
-            _objListAddr = objListAddr;
-        }
-        public bool AddTileObject(UInt16 id, UInt16 gid, TileFlags flags, int x, int y)
-        {
-            return TLN_AddTileObjectToList(_objListAddr, id, gid, flags, x, y);
-        }
-        public ObjectList(string filename, string layername)
-        {
-            _objListAddr = TLN_LoadObjectList(filename, layername);
-        }
-        public ObjectList LoadObjectList(string filename, string layername)
-        {
-            return new ObjectList(TLN_LoadObjectList(filename, layername));
-        }
-        public ObjectList Clone()
-        {
-            return new ObjectList(TLN_CloneObjectList(_objListAddr));
-        }
-        public int NumObjects { get { return TLN_GetListNumObjects(_objListAddr); } }
-        public ObjectInfo ObjectInfo
-        {
-            get
-            {
-                ObjectInfo objInfo = new ObjectInfo();
-                unsafe
-                {
-                    TLN_GetListObject(_objListAddr, (IntPtr)(&objInfo));
-                }
-                return objInfo;
-            }
-        }
-        public void Delete()
-        {
-            TLN_DeleteObjectList(_objListAddr);
-            _objListAddr = IntPtr.Zero;
-        }
-    }
-
-    public struct SpriteSet
-    {
-        private IntPtr _sprSetAddr;
-        public IntPtr SprSet
-        {
-            get { return _sprSetAddr; }
-        }
-
-        public SpriteSet(Bitmap bitmap, SpriteData[] data, int numEntries)
-        {
-            _sprSetAddr = TLN_CreateSpriteset(bitmap.Bmap, data, numEntries);
-        }
-        public SpriteSet(string filename)
-        {
-            _sprSetAddr = TLN_LoadSpriteset(filename);
-        }
-        public SpriteSet(IntPtr sprSetAddr)
-        {
-            _sprSetAddr = sprSetAddr;
-        }
-        public static SpriteSet LoadSpriteset(string fileName)
-        {
-            return new SpriteSet(TLN_LoadSpriteset(fileName));
-        }
-        public SpriteInfo GetInfos(int entry)
-        {
-            var infos = new SpriteInfo();
-            TLN_GetSpriteInfo(_sprSetAddr, entry, out infos);
-            return infos;
-        }
-
-        public Palette Palette
-        {
-            get
-            {
-                return new Palette(TLN_GetSpritesetPalette(_sprSetAddr));
-            }
-        }
-        public int FindSprite(string name)
-        {
-            return TLN_FindSpritesetSprite(SprSet, name);
-        }
-        public void Delete()
-        {
-            TLN_DeleteSpriteset(_sprSetAddr);
-            _sprSetAddr = IntPtr.Zero;
-        }
-    }
-
-
-    public struct Sequence
-    {
-        private IntPtr _seqAddr;
-        public IntPtr Seq
-        {
-            get { return _seqAddr; }
-        }
-        public Sequence(IntPtr seqAddr)
-        {
-            _seqAddr = seqAddr;
-        }
-        // Sequence
-        public Sequence(string name, int target, int numFrames, SequenceFrame[] frames)
-        {
-            _seqAddr = TLN_CreateSequence(name, target, numFrames, frames);
-        }
-        // Cycle
-        public Sequence(string name, int numStrips, ColorStrip[] strips)
-        {
-            _seqAddr = TLN_CreateCycle(name, numStrips, strips);
-        }
-        // Sprite
-        public Sequence(string name, SpriteSet spriteset, string baseName, int delay)
-        {
-            _seqAddr = TLN_CreateSpriteSequence(name, spriteset.SprSet, baseName, delay);
-        }
-        public Sequence Clone()
-        {
-            return new Sequence(TLN_CloneSequence(_seqAddr));
-        }
-        public SequenceInfo Infos
-        {
-            get
-            {
-                SequenceInfo seqInfos = new SequenceInfo();
-                TLN_GetSequenceInfo(_seqAddr, out seqInfos);
-                return seqInfos;
-            }
-        }
-        public void Delete()
-        {
-            TLN_DeleteSequence(_seqAddr);
-            _seqAddr = IntPtr.Zero;
-        }
-    }
-
-    public struct Animation
-    {
-        private int _index;
-        public readonly int Index { get { return _index; } }
-        public Animation(int index)
-        {
-            _index = index;
-        }
     }
 
     public struct SpriteState
@@ -4223,357 +3485,5 @@ namespace Tilengine
         /// Whether pixel collision is enabled
         /// </summary>
         public bool collision;
-    }
-
-    public struct Sprite
-    {
-        private int _index;
-        public readonly int Index { get { return _index; } }
-        public Sprite(int index)
-        {
-            _index = index;
-        }
-
-        public bool Config(SpriteSet spriteset, TileFlags flags)
-        {
-            return TLN_ConfigSprite(_index, spriteset.SprSet, flags);
-        }
-        public SpriteSet SpriteSet { set { TLN_SetSpriteSet(_index, value.SprSet); } }
-        public TileFlags Flags { set { TLN_SetSpriteFlags(_index, value); } }
-        public bool EnableFlag(TileFlags flag, bool enable)
-        {
-            return TLN_EnableSpriteFlag(_index, flag, enable);
-        }
-        public Vector2 Pivot { set { TLN_SetSpritePivot(_index, value.X, value.Y); } }
-        public bool SetPivot(float px, float py)
-        {
-            return TLN_SetSpritePivot(_index, px, py);
-        }
-        public Vector2 Position
-        {
-            get { return new Vector2(TLN_GetSpriteX(_index), TLN_GetSpriteY(_index)); }
-            set { TLN_SetSpritePosition(_index, (int)value.X, (int)value.Y); }
-        }
-        public bool SetPosition(int x, int y)
-        {
-            return TLN_SetSpritePosition(_index, x, y);
-        }
-        public int X
-        {
-            get { return TLN_GetSpriteX(_index); }
-            set { TLN_SetSpritePosition(_index, value, TLN_GetSpriteY(_index)); }
-        }
-        public int Y
-        {
-            get { return TLN_GetSpriteY(_index); }
-            set { TLN_SetSpritePosition(_index, TLN_GetSpriteX(_index), value); }
-        }
-        public int Picture
-        {
-            get { return TLN_GetSpritePicture(_index); }
-            set { TLN_SetSpritePicture(_index, value); }
-        }
-        public Palette Palette
-        {
-            get { return new Palette(TLN_GetSpritePalette(_index)); }
-            set { TLN_SetSpritePalette(_index, value.Pal); }
-        }
-        public bool SetBlendMode(Blend mode, byte factor)
-        {
-            return TLN_SetSpriteBlendMode(_index, mode, factor);
-        }
-        public Vector2 Scaling { set { TLN_SetSpriteScaling(_index, value.X, value.Y); } }
-        public bool SetScaling(float sx, float sy)
-        {
-            return TLN_SetSpriteScaling(_index, sx, sy);
-        }
-        public bool ResetScaling()
-        {
-            return TLN_ResetSpriteScaling(_index);
-        }
-        public bool EnableCollision { set { TLN_EnableSpriteCollision(_index, value); } }
-        public bool Collision { get { return TLN_GetSpriteCollision(_index); } }
-        public SpriteState SpriteState
-        {
-            get
-            {
-                var st = new TLN_SpriteState();
-                TLN_GetSpriteState(_index, out st);
-                var newSt = new SpriteState();
-                newSt.spriteset = new SpriteSet(st.spriteset);
-                newSt.flags = st.flags;
-                newSt.w = st.w;
-                newSt.h = st.h;
-                newSt.x = st.x;
-                newSt.y = st.y;
-                newSt.collision = st.collision;
-                newSt.enabled = st.enabled;
-                newSt.index = st.index;
-                newSt.palette = new Palette(st.palette);
-                return newSt;
-            }
-        }
-        public bool SetFirstSprite()
-        {
-            return TLN_SetFirstSprite(_index);
-        }
-        public Sprite Next { set { TLN_SetNextSprite(_index, value.Index); } }
-        public bool Masking { set { TLN_EnableSpriteMasking(_index, value); } }
-        //public Vector2 MaskRegion {set{TLN_SetSpritesMaskRegion((int)value.X, (int)value.Y);}}
-        public bool SetAnimation(Sequence sequence, int loop)
-        {
-            return TLN_SetSpriteAnimation(_index, sequence.Seq, loop);
-        }
-        public bool DisableAnimation()
-        {
-            return TLN_DisableSpriteAnimation(_index);
-        }
-        public bool PauseAnimation()
-        {
-            return TLN_PauseSpriteAnimation(_index);
-        }
-        public bool ResumeAnimation()
-        {
-            return TLN_ResumeSpriteAnimation(_index);
-        }
-        public bool DisableAnim()
-        {
-            return TLN_DisableAnimation(_index);
-        }
-        public bool Disable()
-        {
-            return TLN_DisableSprite(_index);
-        }
-        // TODO : Get Availlable sprite
-    }
-    public struct Engine
-    {
-        private static Engine _engineInstance;
-        private static bool init = false;
-        private IntPtr _engineAddr;
-        private Layer[] _layers;
-        private Sprite[] _sprites;
-        private Animation[] _animations;
-        public readonly Layer[] Layers { get { return _layers; } }
-        public readonly Sprite[] Sprites { get { return _sprites; } }
-        public readonly Animation[] Animations { get { return _animations; } }
-
-        public static Engine? Instance { get { return init ? _engineInstance : null; } }
-
-        public Engine(int hres = 384, int vres = 216, int numLayers = 3, int numSprites = 64, int numAnimations = 64, int fps = 60)
-        {
-            // _engineAddr = TLN_Init(hres, vres, numLayers, numSprites, numAnimations);
-            // _layers = new Layer[numLayers];
-            // _sprites = new Sprite[numSprites];
-            // _animations = new Animation[numAnimations];
-
-            // for(int i = 0; i < numLayers; i++)
-            //     _layers[i] = new Layer(i);
-
-            // for(int i = 0; i < numSprites; i++)
-            //     _sprites[i] = new Sprite(i);
-
-            // for(int i = 0; i < numAnimations; i++)
-            //     _animations[i] = new Animation(i);
-            // _instance = this;
-            if (!init)
-            {
-                _engineAddr = TLN_Init(hres, vres, numLayers, numSprites, numAnimations);
-                _layers = new Layer[numLayers];
-                _sprites = new Sprite[numSprites];
-                _animations = new Animation[numAnimations];
-
-                for (int i = 0; i < numLayers; i++)
-                    _layers[i] = new Layer(i);
-
-                for (int i = 0; i < numSprites; i++)
-                    _sprites[i] = new Sprite(i);
-
-                for (int i = 0; i < numAnimations; i++)
-                    _animations[i] = new Animation(i);
-                _engineInstance = this;
-                init = true;
-                TLN_SetTargetFps(fps);
-            }
-        }
-
-        public Engine(Vector2 windowDimentions, int numLayers = 3, int numSprites = 64, int numAnimations = 64, int fps = 60)
-        {
-            // _engineAddr = TLN_Init(hres, vres, numLayers, numSprites, numAnimations);
-            // _layers = new Layer[numLayers];
-            // _sprites = new Sprite[numSprites];
-            // _animations = new Animation[numAnimations];
-
-            // for(int i = 0; i < numLayers; i++)
-            //     _layers[i] = new Layer(i);
-
-            // for(int i = 0; i < numSprites; i++)
-            //     _sprites[i] = new Sprite(i);
-
-            // for(int i = 0; i < numAnimations; i++)
-            //     _animations[i] = new Animation(i);
-            // _instance = this;
-            if (!init)
-            {
-                _engineAddr = TLN_Init((int)windowDimentions.X, (int)windowDimentions.Y, numLayers, numSprites, numAnimations);
-                _layers = new Layer[numLayers];
-                _sprites = new Sprite[numSprites];
-                _animations = new Animation[numAnimations];
-
-                for (int i = 0; i < numLayers; i++)
-                    _layers[i] = new Layer(i);
-
-                for (int i = 0; i < numSprites; i++)
-                    _sprites[i] = new Sprite(i);
-
-                for (int i = 0; i < numAnimations; i++)
-                    _animations[i] = new Animation(i);
-                _engineInstance = this;
-                init = true;
-                TLN_SetTargetFps(fps);
-            }
-        }
-        public uint NumObjects { get { return TLN_GetNumObjects(); } }
-        public int numLayers { get { return TLN_GetNumLayers(); } }
-        public int NumSprites { get { return TLN_GetNumSprites(); } }
-        public uint UsedMemory { get { return TLN_GetUsedMemory(); } }
-        public int Width { get { return TLN_GetWidth(); } }
-        public int Height { get { return TLN_GetHeight(); } }
-
-        public int TargetFps
-        {
-            get { return TLN_GetTargetFps(); }
-            set { TLN_SetTargetFps(value); }
-        }
-        public Color BackgroundColor { set { TLN_SetBGColor(value.r, value.g, value.b); } }
-        public Bitmap BGBitmap { set { TLN_SetBGBitmap(value.Bmap); } }
-        public Palette BGPalette { set { TLN_SetBGPalette(value.Pal); } }
-        public VideoCallback RasterCallback { set { TLN_SetRasterCallback(value); } }
-        public VideoCallback FrameCallback { set { TLN_SetFrameCallback(value); } }
-        public bool SetGlobalPalette(int index, Palette palette)
-        {
-            return TLN_SetGlobalPalette(index, palette.Pal);
-        }
-        public Palette GetGlobalPalette(int index)
-        {
-            return new Palette(TLN_GetGlobalPalette(index));
-        }
-        public void SetBackgroundColor(byte r, byte g, byte b)
-        {
-            TLN_SetBGColor(r, g, b);
-        }
-        public void SetRenderTarget(byte[] data, int pitch)
-        {
-            TLN_SetRenderTarget(data, pitch);
-        }
-        public void UpdateFrame(int frame)
-        {
-            TLN_UpdateFrame(frame);
-        }
-        public string LoadPath { set { TLN_SetLoadPath(value); } }
-        public BlendFunction BlendFunction { set { TLN_SetCustomBlendFunction(value); } }
-        public LogLevel LogLevel { set { TLN_SetLogLevel(value); } }
-        public bool OpenResourcePack(string filename, string? key = null)
-        {
-            return TLN_OpenResourcePack(filename, key);
-        }
-        public void CloseResourcePack()
-        {
-            TLN_CloseResourcePack();
-        }
-        public void DeInit()
-        {
-            TLN_Deinit();
-        }
-        public void DisableBackgroundColor()
-        {
-            TLN_DisableBGColor();
-        }
-    }
-
-    public struct Window
-    {
-        private static Window _window;
-        private static bool _init = false;
-        public static Window? WinInstance { get { return _init ? _window : null; } }
-
-        public Window() : this((WindowFlags.CWF_S2 | WindowFlags.CWF_NOVSYNC), false, null, null)
-        {
-            Console.WriteLine("Creating window...");
-        }
-        public Window(WindowFlags flags = (WindowFlags.CWF_S2 | WindowFlags.CWF_NOVSYNC), bool threaded = false, string title = null, string overlay = null)
-        {
-            if (!_init)
-            {
-                if (!threaded)
-                    TLN_CreateWindow(overlay, flags);
-                else
-                    TLN_CreateWindowThread(overlay, flags);
-                _window = this;
-                _init = true;
-                if (title != null)
-                    TLN_SetWindowTitle(title);
-            }
-        }
-        public string Title { set { TLN_SetWindowTitle(value); } }
-        public bool Process { get { return TLN_ProcessWindow(); } }
-        public bool Active { get { return TLN_IsWindowActive(); } }
-        public bool GetInput(TLN_Input input)
-        {
-            return TLN_GetInput(input);
-        }
-        public void EnableInput(TLN_Player player, bool enable)
-        {
-            TLN_EnableInput(player, enable);
-        }
-        public void AssignInputJoystick(TLN_Player player, int index)
-        {
-            TLN_AssignInputJoystick(player, index);
-        }
-        public void DefineInputKey(TLN_Player player, TLN_Input input, UInt32 keycode)
-        {
-            TLN_DefineInputKey(player, input, keycode);
-        }
-        public void DefineInputButton(TLN_Player player, TLN_Input input, byte button)
-        {
-            TLN_DefineInputButton(player, input, button);
-        }
-        public void DrawFrame(int frame)
-        {
-            TLN_DrawFrame(frame);
-        }
-        public void WaitRedraw()
-        {
-            TLN_WaitRedraw();
-        }
-        public void Delete()
-        {
-            TLN_DeleteWindow();
-            _init = false;
-        }
-        public bool Blur { set { TLN_EnableBlur(value); } }
-        public void ConfigCrt(CRT type, bool blur)
-        {
-            TLN_ConfigCRTEffect(type, blur);
-        }
-        public void EnableCrt(Overlay overlay, byte overlayFactor, byte threshold, byte v0, byte v1, byte v2, byte v3, bool blur, byte glowFactor)
-        {
-            TLN_EnableCRTEffect(overlay, overlayFactor, threshold, v0, v1, v2, v3, blur, glowFactor);
-        }
-        public void DisableCrt()
-        {
-            TLN_DisableCRTEffect();
-        }
-        public uint Delay { set { TLN_Delay(value); } }
-        public uint Ticks { get { return TLN_GetTicks(); } }
-        public uint AvgFPS { get { return TLN_GetAverageFps(); } }
-        public int Width { get { return TLN_GetWindowWidth(); } }
-        public int Height { get { return TLN_GetWindowHeight(); } }
-        public int ScaleFactor
-        {
-            get { return TLN_GetWindowScaleFactor(); }
-            set { TLN_SetWindowScaleFactor(value); }
-        }
-
     }
 }
