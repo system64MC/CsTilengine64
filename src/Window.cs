@@ -139,6 +139,7 @@ namespace Tilengine
     }
     public struct EngineArgs
     {
+        public readonly bool IsDefault = true;
         int hres;
         int vres;
         int numLayers;
@@ -157,27 +158,30 @@ namespace Tilengine
 
         public EngineArgs(int hres = 384, int vres = 216, int numLayers = 3, int numSprites = 64, int numAnimations = 64, int fps = 60, string loadPath = null!)
         {
+            IsDefault = false;
             this.Hres = hres;
             this.Vres = vres;
             this.NumLayers = numLayers;
             this.NumSprites = numSprites;
             this.NumAnimations = numAnimations;
             this.Fps = fps;
-            if(loadPath != null)
+            if (loadPath != null)
                 this.loadPath = loadPath;
             else
                 this.loadPath = "";
         }
         public EngineArgs(Vector2 resolution, int numLayers, int numSprites, int numAnimations, int fps, string loadPath) : this((int)resolution.X, (int)resolution.Y, numLayers, numSprites, numAnimations, fps, loadPath) { }
-        public EngineArgs() : this(384, 216, 3, 64, 64, 60, null!) { }
+        public EngineArgs() : this(384, 216, 3, 64, 64, 60, null!) {
+            IsDefault = true;
+         }
 
         // equality operator
         public static bool operator ==(EngineArgs a, EngineArgs b) => a.Equals(b);
         public static bool operator !=(EngineArgs a, EngineArgs b) => !a.Equals(b);
 
-        #pragma warning disable CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
+#pragma warning disable CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
         public override bool Equals(object obj)
-        #pragma warning restore CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
+#pragma warning restore CS8765 // Nullability of type of parameter doesn't match overridden member (possibly because of nullability attributes).
         {
             if (obj is EngineArgs other)
             {
@@ -214,45 +218,149 @@ namespace Tilengine
             set { setter(value); }
         }
         // implicit conversion to nullable T
-        public static implicit operator T?(Ref<T> r) => r.Value;
+        public static implicit operator T(Ref<T> r) => r.Value;
+    }
+
+    public class EngineRef : Ref<Engine>
+    {
+        public EngineRef(Func<Engine> getter, Action<Engine> setter) : base(getter, setter) { }
+        public static implicit operator Engine(EngineRef r) => r.Value;
+        public static implicit operator EngineRef(Engine e) => new EngineRef(() => e, (Engine v) => e = v);
+        public Layer[] Layers => Value.Layers;
+        public Sprite[] Sprites => Value.Sprites;
+        public Animation[] Animations => Value.Animations;
+        public uint NumObjects => Value.NumObjects;
+        public int numLayers => Value.numLayers;
+        public int NumSprites => Value.NumSprites;
+        public uint UsedMemory => Value.UsedMemory;
+        public int Width => Value.Width;
+        public int Height => Value.Height;
+        public string LastError => Value.LastError;
+        public int TargetFps => Value.TargetFps;
+        public Color BackgroundColor
+        {
+            set
+            {
+                var val = Value;
+                val.BackgroundColor = value;
+                Value = val;
+            }
+        }
+        public Bitmap BGBitmap
+        {
+            set
+            {
+                var val = Value;
+                val.BGBitmap = value;
+                Value = val;
+            }
+        }
+        public Palette BGPalette
+        {
+            set
+            {
+                var val = Value;
+                val.BGPalette = value;
+                Value = val;
+            }
+        }
+        public VideoCallback RasterCallback
+        {
+            set
+            {
+                var val = Value;
+                val.RasterCallback = value;
+                Value = val;
+            }
+        }
+        public VideoCallback FrameCallback
+        {
+            set
+            {
+                var val = Value;
+                val.FrameCallback = value;
+                Value = val;
+            }
+        }
+        public bool SetGlobalPalette(int index, Palette palette) => Value.SetGlobalPalette(index, palette);
+        public Palette GetGlobalPalette(int index) => Value.GetGlobalPalette(index);
+        public void SetBackgroundColor(byte r, byte g, byte b) => Value.SetBackgroundColor(r, g, b);
+        public void SetRenderTarget(byte[] data, int pitch) => Value.SetRenderTarget(data, pitch);
+        public void UpdateFrame(int frame) => Value.UpdateFrame(frame);
+        public string LoadPath
+        {
+            set
+            {
+                var val = Value;
+                val.LoadPath = value;
+                Value = val;
+            }
+        }
+        public BlendFunction BlendFunction
+        {
+            set
+            {
+                var val = Value;
+                val.BlendFunction = value;
+                Value = val;
+            }
+        }
+        public LogLevel LogLevel
+        {
+            set
+            {
+                var val = Value;
+                val.LogLevel = value;
+                Value = val;
+            }
+        }
+        public bool OpenResourcePack(string filename, string key = null!) => Value.OpenResourcePack(filename, key);
+        public void CloseResourcePack() => Value.CloseResourcePack();
+        public void DeInit() => Value.DeInit();
+        public bool SetContext() => Value.SetContext();
+        public void Delete() => Value.Delete();
+        public void DisableBackgroundColor() => Value.DisableBackgroundColor();
     }
 
     public struct Window
     {
         private bool _init = false;
-        private CancellationTokenSource? _loop = new CancellationTokenSource();
+        private CancellationTokenSource? _loop = null;
         private bool _threaded = false;
         private Engine? _engine;
-        private Ref<Engine>? _engineRef = null;
+        private EngineRef? _engineRef = null;
         private void SetEngine(Engine engine)
         {
             _engine = engine;
         }
         private Engine GetEngine()
         {
-            #pragma warning disable CS8629
+#pragma warning disable CS8629
             return _engine.Value;
             // throws an error if engine is null, so it is not a safe getter
             // for our purposes, however, it just replaces a lambda
-            #pragma warning restore CS8629
+#pragma warning restore CS8629
         }
-        public Ref<Engine> Engine
+        public Engine Engine
         {
             get
             {
-                if(_engine == null)
+                if (_engine == null)
                 {
-                    return _engineRef ?? new Ref<Engine>(GetEngine, SetEngine);
+                    return _engineRef!;
                 }
-                return new Ref<Engine>(GetEngine, SetEngine);
+                return new EngineRef(GetEngine, SetEngine);
             }
         }
+        public bool HasEngine { get { return _engine != null || _engineRef != null; } }
         public static List<Window> Instances { get; private set; } = new List<Window>();
         public delegate void FrameEvent(Window window, FrameArgs e);
         public event FrameEvent BeforeFrame = delegate { };
         public event FrameEvent AfterFrame = delegate { };
         private EngineArgs _engineArgs;
         public Window() : this(engineArgs: new EngineArgs()) { }
+        public Window(WindowFlags flags = (WindowFlags.S2 | WindowFlags.NOVSYNC), bool threaded = false, string title = null!, string overlay = null!, bool autostart = true)
+            : this(engineArgs: new EngineArgs(), flags, threaded, title, overlay, autostart) { }
         public Window(EngineArgs engineArgs = default, WindowFlags flags = (WindowFlags.S2 | WindowFlags.NOVSYNC), bool threaded = false, string title = null!, string overlay = null!, bool autostart = true)
             : this(engineArgs as EngineArgs?, flags, threaded, title, overlay, autostart) { }
         public Window(EngineArgs? engineArgs, WindowFlags flags = (WindowFlags.S2 | WindowFlags.NOVSYNC), bool threaded = false, string title = null!, string overlay = null!, bool autostart = true)
@@ -261,7 +369,7 @@ namespace Tilengine
             {
                 if (engineArgs != null)
                 {
-                    if (engineArgs == default(EngineArgs))
+                    if (engineArgs.Value.IsDefault)
                     {
                         engineArgs = new EngineArgs();
                     }
@@ -315,7 +423,7 @@ namespace Tilengine
             }
             return false;
         }
-        public bool SetManagedEngine(Ref<Engine> engine)
+        public bool SetManagedEngine(EngineRef engine)
         {
             _engine?.Delete();
             _engine = null;
@@ -385,6 +493,7 @@ namespace Tilengine
                 return;
             _loop = new CancellationTokenSource();
             Task task = new Task(Loop, _loop.Token);
+            task.Start();
         }
         public void Stop()
         {
@@ -399,13 +508,13 @@ namespace Tilengine
         }
         private async void Loop()
         {
-            if (Engine == null)
+            if (!HasEngine)
             {
                 throw new Exception("No engine set for window: cannot draw");
             }
             while (Process)
             {
-                if (!Engine.Value.SetContext())
+                if (!Engine.SetContext())
                 {
                     throw new Exception("Failed to set context");
                 }
@@ -416,6 +525,8 @@ namespace Tilengine
                 }
                 catch (Exception)
                 {
+                    Console.WriteLine("TODO: handle exception");
+                    throw;
                     // TODO: handle exception
                     // ensure it doesn't happen again, or at least not too often
                     // It's only O(1) when there are no exceptions
