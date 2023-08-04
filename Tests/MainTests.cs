@@ -165,17 +165,14 @@ namespace Game
             var tile = foreground.GetTile(23, 0);
             tile.flipy = true;
             foreground.SetTile(23, 0, tile);
-
-            engine.RasterCallback = (int line) =>
-            {
-                engine.Layers[0].X = (int)(Math.Sin(line * 0.25) * 4);
-            };
+            Console.WriteLine(engine.LastError);
 
             while(window.Process)
             {
                 BeforeFrame(window, new());
                 window.DrawFrame(0);
                 AfterFrame(window, new());
+                //Console.WriteLine(engine.LastError);
             }
         }
 
