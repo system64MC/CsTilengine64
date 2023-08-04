@@ -14,7 +14,7 @@
 			"label": "dotnet: run",
 			"group": "build",
 			"type": "shell",
-			"command": "Start-PRocess -FilePath \"${workspaceFolder}\\test.bat\"",
+			"command": "Start-Process -FilePath \"${workspaceFolder}\\test.bat\"",
 			"presentation": {
 				"reveal": "never"
 			},
