@@ -135,6 +135,7 @@ namespace Tilengine
 
     public struct FrameArgs
     {
+        public float deltaTime;
         // TODO: WHATEVER YOU WANT TO PASS ALONG
     }
     public struct EngineArgs
@@ -322,7 +323,7 @@ namespace Tilengine
         public void DisableBackgroundColor() => Value.DisableBackgroundColor();
     }
 
-    public struct Window
+    public class Window
     {
         private bool _init = false;
         private CancellationTokenSource? _loop = null;
@@ -355,8 +356,8 @@ namespace Tilengine
         public bool HasEngine { get { return _engine != null || _engineRef != null; } }
         public static List<Window> Instances { get; private set; } = new List<Window>();
         public delegate void FrameEvent(Window window, FrameArgs e);
-        public event FrameEvent BeforeFrame = delegate { };
-        public event FrameEvent AfterFrame = delegate { };
+        public event FrameEvent BeforeFrame = (window, e) => { };
+        public event FrameEvent AfterFrame = (window, e) => { };
         private EngineArgs _engineArgs;
         public Window() : this(engineArgs: new EngineArgs()) { }
         public Window(WindowFlags flags = (WindowFlags.S2 | WindowFlags.NOVSYNC), bool threaded = false, string title = null!, string overlay = null!, bool autostart = true)
@@ -492,22 +493,36 @@ namespace Tilengine
             if (_loop != null)
                 return;
             _loop = new CancellationTokenSource();
-            Task task = new Task(Loop, _loop.Token);
-            task.Start();
+            Loop(_loop.Token);
         }
         public void Stop()
         {
             _loop?.Cancel();
         }
+        private DateTime _lastFrame = DateTime.Now;
         private FrameArgs CollectFrameArgs()
         {
+            float dt = (float)(DateTime.Now - _lastFrame).TotalSeconds;
+            _lastFrame = DateTime.Now;
             return new FrameArgs()
             {
+                deltaTime = dt
                 // TODO: collect relevant data
             };
         }
-        private async void Loop()
+        private async void Loop(CancellationToken token)
         {
+            bool CheckToken()
+            {
+                if (token.IsCancellationRequested)
+                {
+                    return true;
+                }
+                return false;
+            }
+            await Task.Yield(); // wait for the engine to be set up
+            await Task.Delay(1, token);
+            if(CheckToken()) return;
             if (!HasEngine)
             {
                 throw new Exception("No engine set for window: cannot draw");
@@ -518,7 +533,7 @@ namespace Tilengine
                 {
                     throw new Exception("Failed to set context");
                 }
-                BeforeFrame(this, CollectFrameArgs());
+                BeforeFrame.Invoke(this, CollectFrameArgs());
                 try
                 {
                     DrawFrame(0);
@@ -533,9 +548,10 @@ namespace Tilengine
                     // If the error is likely to happen every frame, just politely exit
                     // This might be done by using an exception type created for this purpose (e.g. SafeException, ContinuableException, etc.)
                 }
-                AfterFrame(this, CollectFrameArgs());
+                AfterFrame.Invoke(this, CollectFrameArgs());
                 await Task.Yield();
                 // housekeeping
+                if(CheckToken()) return;
                 if (!_threaded)
                     TLN_ProcessWindow();
                 // TODO: rest of housekeeping
