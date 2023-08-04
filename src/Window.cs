@@ -214,7 +214,13 @@ namespace Tilengine
             set { setter(value); }
         }
         // implicit conversion to nullable T
-        public static implicit operator T?(Ref<T> r) => r.Value;
+        public static implicit operator T(Ref<T> r) => r.Value;
+    }
+
+    public class EngineRef : Ref<Engine>
+    {
+        public EngineRef(Func<Engine> getter, Action<Engine> setter) : base(getter, setter) { }
+        public static implicit operator Engine(EngineRef r) => r.Value;
     }
 
     public struct Window
@@ -223,7 +229,7 @@ namespace Tilengine
         private CancellationTokenSource? _loop = new CancellationTokenSource();
         private bool _threaded = false;
         private Engine? _engine;
-        private Ref<Engine>? _engineRef = null;
+        private EngineRef? _engineRef = null;
         private void SetEngine(Engine engine)
         {
             _engine = engine;
@@ -236,23 +242,28 @@ namespace Tilengine
             // for our purposes, however, it just replaces a lambda
             #pragma warning restore CS8629
         }
-        public Ref<Engine> Engine
+        public Engine Engine
         {
             get
             {
                 if(_engine == null)
                 {
-                    return _engineRef ?? new Ref<Engine>(GetEngine, SetEngine);
+                    #pragma warning disable CS8604 // Possible null reference argument.
+                    return _engineRef;
+                    #pragma warning restore CS8604 // Possible null reference argument.
                 }
-                return new Ref<Engine>(GetEngine, SetEngine);
+                return new EngineRef(GetEngine, SetEngine);
             }
         }
+        public bool HasEngine { get { return _engine != null || _engineRef != null; } }
         public static List<Window> Instances { get; private set; } = new List<Window>();
         public delegate void FrameEvent(Window window, FrameArgs e);
         public event FrameEvent BeforeFrame = delegate { };
         public event FrameEvent AfterFrame = delegate { };
         private EngineArgs _engineArgs;
         public Window() : this(engineArgs: new EngineArgs()) { }
+        public Window(WindowFlags flags = (WindowFlags.S2 | WindowFlags.NOVSYNC), bool threaded = false, string title = null!, string overlay = null!, bool autostart = true)
+            : this(engineArgs: new EngineArgs(), flags, threaded, title, overlay, autostart) { }
         public Window(EngineArgs engineArgs = default, WindowFlags flags = (WindowFlags.S2 | WindowFlags.NOVSYNC), bool threaded = false, string title = null!, string overlay = null!, bool autostart = true)
             : this(engineArgs as EngineArgs?, flags, threaded, title, overlay, autostart) { }
         public Window(EngineArgs? engineArgs, WindowFlags flags = (WindowFlags.S2 | WindowFlags.NOVSYNC), bool threaded = false, string title = null!, string overlay = null!, bool autostart = true)
@@ -315,7 +326,7 @@ namespace Tilengine
             }
             return false;
         }
-        public bool SetManagedEngine(Ref<Engine> engine)
+        public bool SetManagedEngine(EngineRef engine)
         {
             _engine?.Delete();
             _engine = null;
@@ -399,13 +410,13 @@ namespace Tilengine
         }
         private async void Loop()
         {
-            if (Engine == null)
+            if (HasEngine)
             {
                 throw new Exception("No engine set for window: cannot draw");
             }
             while (Process)
             {
-                if (!Engine.Value.SetContext())
+                if (!Engine.SetContext())
                 {
                     throw new Exception("Failed to set context");
                 }

@@ -137,6 +137,23 @@ namespace Tilengine
             return TLN_SetTilemapTile(_tilemapAddr, row, column, tile);
         }
 
+        public Tile this[int row, int column]
+        {
+            get
+            {
+                Tile tile;
+                bool success = TLN_GetTilemapTile(_tilemapAddr, row, column, out tile);
+                if (!success)
+                    tile.index = 0xFFFF;
+                return tile;
+            }
+
+            set
+            {
+                TLN_SetTilemapTile(_tilemapAddr, row, column, value);
+            }
+        }
+
         public bool SetTileAttribute(int row, int column, byte? unused = null, byte? palette = null, byte? tileset = null, bool? masked = null, bool? priority = null, bool? rotated = null, bool? flipy = null, bool? flipx = null)
         {
             Tile tile = new();

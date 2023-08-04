@@ -10,6 +10,9 @@
 
   <ItemGroup>
     <Folder Include="vendor\" />
+    <Content Remove="Tests\**" />
+    <Compile Remove="Tests\**" />
+    <EmbeddedResource Remove="Tests\**" />
+    <None Remove="Tests\**" />
   </ItemGroup>
-
 </Project>

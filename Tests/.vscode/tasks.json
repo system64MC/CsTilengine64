@@ -1,0 +1,33 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "dotnet",
+			"task": "build",
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": "build",
+			"label": "dotnet: build"
+		},
+		{
+			"label": "dotnet: run",
+			"group": "build",
+			"type": "shell",
+			"command": "Start-PRocess -FilePath \"${workspaceFolder}\\test.bat\"",
+			"presentation": {
+				"reveal": "never"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "dotnet: build & run",
+			"group": "build",
+			"dependsOn": [
+				"dotnet: build",
+				"dotnet: run"
+			],
+			"dependsOrder": "sequence"
+		}
+	]
+}
