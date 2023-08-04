@@ -1,12 +1,21 @@
-using System.Numerics;
 using Tilengine;
-using SDL2;
 using static SDL2.SDL;
 
 namespace Game
 {
     public class Test
     {
+        private static void KeepAlive()
+        {
+            SDL_Event e;
+            while (SDL_WaitEvent(out e) != 0)
+            {
+                if (e.type == SDL_EventType.SDL_QUIT)
+                {
+                    break;
+                }
+            }
+        }
         private static Tilemap foreground;
         public static void Main(string[] args)
         {
@@ -39,20 +48,25 @@ namespace Game
                         MainLegacy();
                         break;
                     case 4:
-                        MainStandard();
-                        MainDelayed();
-                        MainManaged();
-                        MainLegacy();
+                        Thread thread0 = new(MainStandard);
+                        Thread thread1 = new(MainDelayed);
+                        Thread thread2 = new(MainManaged);
+                        Thread thread3 = new(MainLegacy);
+                        thread0.Start();
+                        thread1.Start();
+                        thread2.Start();
+                        thread3.Start();
                         break;
                     default:
                         throw new NotImplementedException("Test "+test+" does not exist");
                 }
+                KeepAlive();
             }
             catch (Exception e)
             {
-                Console.WriteLine("An error occured:");
-                Console.WriteLine("At "+(e.Source ?? "unknown"));
-                Console.WriteLine("At "+(e.StackTrace ?? "unknown"));
+                Console.WriteLine("An error occured: "+e.Message);
+                Console.WriteLine(e.Source);
+                Console.WriteLine(e.StackTrace);
             }
         }
         public static void MainStandard()
@@ -151,6 +165,11 @@ namespace Game
             var tile = foreground.GetTile(23, 0);
             tile.flipy = true;
             foreground.SetTile(23, 0, tile);
+
+            engine.RasterCallback = (int line) =>
+            {
+                engine.Layers[0].X = (int)(Math.Sin(line * 0.25) * 4);
+            };
 
             while(window.Process)
             {
